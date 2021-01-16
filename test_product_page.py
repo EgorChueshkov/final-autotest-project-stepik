@@ -1,6 +1,35 @@
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
+from .pages.login_page import LoginPage
 import pytest
+from faker import Faker
+
+faker = Faker()
+
+
+class TestUserAddToBasketFromProductPage():
+
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        login_page = LoginPage(browser, link)
+        login_page.open()
+        login_page.register_new_user(faker.email(), 'rumkV5WzSHKRA9q')
+        login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = f"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_product_to_basket()
+        page.solve_quiz_and_get_code()
+        page.should_be_success_messages()
 
 
 @pytest.mark.parametrize('promo_offer', ["0", "1", "2", "3", "4", "5", "6",
