@@ -2,13 +2,13 @@ from selenium import webdriver
 import time
 
 
-link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+link = "http://selenium1py.pythonanywhere.com/"
 
 try:
     browser = webdriver.Chrome()
     browser.get(link)
 
-    button = browser.find_element_by_css_selector("#add_to_basket_form > button.btn-add-to-basket")
+    button = browser.find_element_by_css_selector(".basket-mini a.btn-default")
     button.click()
 
 finally:
